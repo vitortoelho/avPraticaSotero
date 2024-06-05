@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, ScrollView, TextInput, TouchableOpacity, Text, Modal, Button } from 'react-native';
+import { View, ScrollView, TextInput, TouchableOpacity, Text, Modal, Button, Alert } from 'react-native';
 import { estilos as estilosCadastro } from './styles/cadastroStyles'; // Importa o estilo da tela que é outro arquivo, para economizar linhas
 import { getAuth, createUserWithEmailAndPassword as criarEmailSenha} from 'firebase/auth';
+import { getDatabase, ref, set } from 'firebase/database';
 
-export default function TelaCadastro({ onClose, onSubmit }) {
+export default function TelaCadastro({ onClose }) {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -45,8 +46,9 @@ export default function TelaCadastro({ onClose, onSubmit }) {
       const user = userCredential.user;
       const uid = user.uid;
   
-      // Se o usuário foi criado com sucesso, você pode adicionar os outros detalhes do usuário, se necessário
-      const dadosUsuario = {
+      // Salvar informações adicionais no Realtime Database
+      const database = getDatabase();
+      await set(ref(database, 'users/' + uid), {
         nome,
         email,
         cep,
@@ -55,11 +57,8 @@ export default function TelaCadastro({ onClose, onSubmit }) {
         bairro,
         estado,
         numero,
-      };
-      
-      onSubmit(dadosUsuario);
+      });
   
-      
       limparTodosOsCampos();
   
       Alert.alert('Cadastro realizado com sucesso!');
@@ -141,14 +140,13 @@ export default function TelaCadastro({ onClose, onSubmit }) {
           secureTextEntry
         />
         <View
-
-        style={{
-          flex: 1,
-          flexGrow: 1,
-          width: "100%",
-          alignItems: 'center',
-          flexDirection: "row",
-        }}>
+          style={{
+            flex: 1,
+            flexGrow: 1,
+            width: "100%",
+            alignItems: 'center',
+            flexDirection: "row",
+          }}>
           <TextInput
             style={estilosCadastro.inputCEP}
             placeholder="CEP"

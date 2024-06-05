@@ -32,7 +32,9 @@ function LoginScreen({ navigation }) {
       const userCredential = await loginEmailSenha(auth, nomeUsuario, senha); 
       const user = userCredential.user;
       console.log('Usuário logado:', user);
-      navigation.navigate('Home', { nomeUsuario: user.displayName });
+
+      navigation.navigate('Welcome', { nome: nomeUsuario });
+
       setNomeUsuario('');
       setSenha('');
     } catch (error) {
@@ -92,7 +94,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Welcome" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

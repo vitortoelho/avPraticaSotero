@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import App from './App';
-
-
 
 export default function HomeScreen({ route }) {
-  const { nomeUsuario } = route.params
+  const { nome } = route.params;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo à Tela Principal, {nomeUsuario}! </Text>
+      <Text style={styles.title}>Olá, bem-vindo(a) {nome}!</Text>
     </View>
   );
 }
